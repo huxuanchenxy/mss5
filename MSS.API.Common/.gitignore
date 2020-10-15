@@ -1,0 +1,14 @@
+# Build and Release Folders
+bin/
+obj/
+logs/
+.vs/
+*.csproj.user
+# Other files and folders
+.eqpTypes/
+PublishProfiles/
+
+# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
+# should NOT be excluded as they contain compiler eqpTypes and other important
+# information for Eclipse / Flash Builder.
+/packages
