@@ -111,6 +111,11 @@ namespace MSS.API.Core.V1.Business
                     user.created_time = dt;
                     user.created_by = userID;
                     user.updated_by = userID;
+                    //如果是外部人员系统生成accname
+                    //if (user.OutMan == 1)
+                    //{
+                    //    user.AccName = "line5" + DateTime.Now.ToString("yyyyMMddHHmmssSSS");
+                    //}
                     mRet.data = await _repo.Save(user);
                     await SaveRedis();
                     mRet.code = (int)ErrType.OK;

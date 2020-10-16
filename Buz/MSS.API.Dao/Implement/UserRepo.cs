@@ -58,29 +58,39 @@ namespace MSS.API.Dao.Implement
                 LEFT JOIN USER c ON a.`updated_by`= c.id
                  ");
 
-                var data = await c.QueryAsync<User>(sql.ToString());
-                var total = data.ToList().Count;
-
-                StringBuilder whereSql = new StringBuilder();
-                whereSql.Append(" WHERE a.is_del = 0 ");
+                sql.Append(" WHERE a.is_del = 0 ");
+                
                 if (!string.IsNullOrEmpty(parm.UserName))
                 {
-                    whereSql.Append(" and a.user_name like '%" + parm.UserName.Trim() + "%'");
+                    sql.Append(" and a.user_name like '%" + parm.UserName.Trim() + "%' " );
                 }
                 if (!string.IsNullOrEmpty(parm.JobNumber))
                 {
-                    whereSql.Append(" and a.job_number like '%" + parm.JobNumber.Trim() + "%'");
+                    sql.Append(" and a.job_number like '%" + parm.JobNumber.Trim() + "%' ");
                 }
-                sql.Append(whereSql);
+                var data = await c.QueryAsync<User>(sql.ToString());
+                var total = data.ToList().Count;
+
                 sql.Append(" order by a." + parm.sort + " " + parm.order)
                 .Append(" limit " + (parm.page - 1) * parm.rows + "," + parm.rows);
                 var ets = await c.QueryAsync<User>(sql.ToString());
+                await GetRefList(ets.ToList());
 
                 UserPageView ret = new UserPageView();
                 ret.rows = ets.ToList();
                 ret.total = total;
                 return ret;
             });
+        }
+
+        private async Task GetRefList(List<User> ets)
+        {
+            var allworktype = await GetWorkType();
+            foreach (var e in ets)
+            {
+                var curWorkType = allworktype.ToList().Where(a => a.UserId == e.id);
+                e.WorkType = curWorkType.ToList();
+            }
         }
 
         public async Task<User> Save(User obj)
@@ -333,6 +343,19 @@ namespace MSS.API.Dao.Implement
                     a.work_type_id  WorkTypeId,b.name  WorkTypeName FROM user_work_type a 
                     LEFT JOIN dictionary_tree b ON a.work_type_id = b.id 
                     WHERE a.user_id = @user_id ", new { user_id = userid });
+                return result.ToList();
+            });
+        }
+
+        public async Task<List<UserWorkType>> GetWorkType()
+        {
+            return await WithConnection(async c =>
+            {
+                var result = await c.QueryAsync<UserWorkType>(
+                    $@" SELECT a.id,a.user_id UserId,
+                    a.work_type_id  WorkTypeId,b.name  WorkTypeName FROM user_work_type a 
+                    LEFT JOIN dictionary_tree b ON a.work_type_id = b.id 
+                     " );
                 return result.ToList();
             });
         }
