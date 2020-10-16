@@ -272,6 +272,7 @@ namespace MSS.API.Dao.Implement
             {
                 var result = (await c.QueryAsync<User>(
                     "select * from user where is_del=" + (int)IsDeleted.no + " and is_super=" + (int)IsSuper.no)).ToList();
+                await GetRefList(result.ToList());
                 return result;
             });
         }
@@ -291,8 +292,8 @@ namespace MSS.API.Dao.Implement
         {
             return await WithConnection(async c =>
             {
-                var result = await c.ExecuteAsync(" update User set password=@password," +
-                    " random_num=@random_num,updated_time=@updated_time,updated_by=@updated_by where id=@id", user);
+                var result = await c.ExecuteAsync(" update user set password=@Password," +
+                    " random_num=@RandomNum,updated_time=@UpdatedTime,updated_by=@UpdatedBy where id=@id", user);
                 return result;
             });
         }
@@ -304,9 +305,9 @@ namespace MSS.API.Dao.Implement
                 Encrypt en = new Encrypt();
                 int r = new Random().Next(1, PWD_RANDOM_MAX);
                 string pwd = en.DoEncrypt(INIT_PASSWORD, r);
-                var result = await c.ExecuteAsync(" update User " +
-                    " set password=@password,updated_time=@updated_time,updated_by=@updated_by where id in @ids",
-                    new { password = pwd, updated_time = DateTime.Now, updated_by = userID, ids = ids });
+                var result = await c.ExecuteAsync(" update user " +
+                    " set password=@Password,random_num=@RandomNum,updated_time=@UpdatedTime,updated_by=@UpdatedBy where id in @ids",
+                    new { Password = pwd, RandomNum = r, UpdatedTime = DateTime.Now, UpdatedBy = userID, ids = ids });
                 return result;
             });
         }
