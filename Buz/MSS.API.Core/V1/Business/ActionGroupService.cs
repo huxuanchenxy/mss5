@@ -75,10 +75,10 @@ namespace MSS.API.Core.V1.Business
             try
             {
                 DateTime dt = DateTime.Now;
-                actionGroup.updated_time = dt;
-                actionGroup.created_time = dt;
-                actionGroup.created_by = userID;
-                actionGroup.updated_by = userID;
+                actionGroup.UpdatedTime = dt;
+                actionGroup.CreatedTime = dt;
+                actionGroup.CreatedBy = userID;
+                actionGroup.UpdatedBy = userID;
                 mRet.data = await _ActionGroupRepo.Add(actionGroup);
                 mRet.code = (int)ErrType.OK;
                 return mRet;
@@ -96,8 +96,8 @@ namespace MSS.API.Core.V1.Business
             MSSResult mRet = new MSSResult();
             try
             {
-                actionGroup.updated_time = DateTime.Now;
-                actionGroup.updated_by = userID;
+                actionGroup.UpdatedTime = DateTime.Now;
+                actionGroup.UpdatedBy = userID;
                 mRet.data = await _ActionGroupRepo.Update(actionGroup);
                 mRet.code = (int)ErrType.OK;
                 return mRet;

@@ -21,27 +21,27 @@ namespace MSS.API.Common.Utility
         }
         public int GetUserId()
         {
-            int userid = -1;
+            int userid = 1;//TODO 接通token后继续调试
 
-            try
-            {
-                string token = string.Empty;
-                var context = _httpContextAccessor.HttpContext;
-                var head = context.Request.Headers["Authorization"];
-                if (!string.IsNullOrEmpty(head))
-                {
-                    if (head.ToString().IndexOf("Bearer") >= 0)
-                    {
-                        token = head.ToString().Replace("Bearer", "").Trim();
+            //try
+            //{
+            //    string token = string.Empty;
+            //    var context = _httpContextAccessor.HttpContext;
+            //    var head = context.Request.Headers["Authorization"];
+            //    if (!string.IsNullOrEmpty(head))
+            //    {
+            //        if (head.ToString().IndexOf("Bearer") >= 0)
+            //        {
+            //            token = head.ToString().Replace("Bearer", "").Trim();
 
-                        userid = int.Parse(_cache.GetString(token));
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message.ToString());
-            }
+            //            userid = int.Parse(_cache.GetString(token));
+            //        }
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new Exception(ex.Message.ToString());
+            //}
             return userid;
         }
     }

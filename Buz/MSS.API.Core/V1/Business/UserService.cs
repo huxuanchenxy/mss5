@@ -107,10 +107,10 @@ namespace MSS.API.Core.V1.Business
                     user.Password = en.DoEncrypt(INIT_PASSWORD,r);
                     user.RandomNum = r;
                     DateTime dt = DateTime.Now;
-                    user.updated_time = dt;
-                    user.created_time = dt;
-                    user.created_by = userID;
-                    user.updated_by = userID;
+                    user.UpdatedTime = dt;
+                    user.CreatedTime = dt;
+                    user.CreatedBy = userID;
+                    user.UpdatedBy = userID;
                     //如果是外部人员系统生成accname
                     //if (user.OutMan == 1)
                     //{
@@ -140,8 +140,8 @@ namespace MSS.API.Core.V1.Business
             ApiResult mRet = new ApiResult();
             try
             {
-                user.updated_time = DateTime.Now;
-                user.updated_by = userID;
+                user.UpdatedTime = DateTime.Now;
+                user.UpdatedBy = userID;
                 mRet.data = await _repo.Update(user);
                 await SaveRedis();
                 mRet.code = (int)ErrType.OK;
@@ -277,7 +277,7 @@ namespace MSS.API.Core.V1.Business
                     //    mRet.relatedData = ui;
                     //    return mRet;
                     //}
-                    mRet.data = ui.id;
+                    mRet.data = ui.Id;
                 }
                 else
                 {

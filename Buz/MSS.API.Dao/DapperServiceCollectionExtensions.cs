@@ -26,11 +26,16 @@ namespace MSS.API.Dao
             services.AddTransient<IRoleRepo<Role>, RoleRepo>();
             services.AddTransient<IActionRepo<ActionInfo>, ActionRepo>();
             services.AddTransient<IDictionaryRepo<DictionaryTree>, DictionaryRepo>();
+            services.AddTransient<IUploadFileRepo<UploadFile>, UploadFileRepo>();
+            services.AddTransient<IEquipmentRepo<Equipment>, EquipmentRepo>();
+            services.AddTransient<IImportExcelConfigRepo<ImportExcelConfig>, ImportExcelConfigRepo>();
             //配置列名映射
             FluentMapper.Initialize(config =>
             {
                 config.AddMap(new UserMap());
-                
+                config.AddMap(new EquipmentMap());
+                config.AddMap(new ImportExcelConfigMap());
+
             });
             return services;
         }

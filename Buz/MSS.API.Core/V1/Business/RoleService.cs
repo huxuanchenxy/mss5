@@ -52,11 +52,11 @@ namespace MSS.API.Core.V1.Business
                 parm.sort = string.IsNullOrWhiteSpace(parm.sort) ? "id" : parm.sort;
                 parm.order = parm.order.ToLower() == "desc" ? "desc" : "asc";
                 mRet = await _RoleRepo.GetPageByParm(parm);
-                int[] arrRoleID = mRet.data.Select(a => a.id).ToArray();
+                int[] arrRoleID = mRet.data.Select(a => a.Id).ToArray();
                 List<RoleActions> lra =await _ActionRepo.GetActionByRoles(arrRoleID);
                 foreach (var item in mRet.data)
                 {
-                    List<ActionAll> actionAll = lra.Where(a => a.roleID == item.id).ToList<ActionAll>();
+                    List<ActionAll> actionAll = lra.Where(a => a.roleID == item.Id).ToList<ActionAll>();
                     item.action_trees = ActionHelper.GetActionTree(actionAll);
                 }
                 mRet.code = (int)ErrType.OK;
@@ -102,10 +102,10 @@ namespace MSS.API.Core.V1.Business
             try
             { 
                 DateTime dt = DateTime.Now;
-                roleStrActions.updated_time = dt;
-                roleStrActions.created_time = dt;
-                roleStrActions.created_by = userID;
-                roleStrActions.updated_by = userID;
+                roleStrActions.UpdatedTime = dt;
+                roleStrActions.CreatedTime = dt;
+                roleStrActions.CreatedBy = userID;
+                roleStrActions.UpdatedBy = userID;
                 bool isRepeat= await _RoleRepo.IsNameRepeat(roleStrActions.role_name);
                 if (isRepeat)
                 {
@@ -133,9 +133,9 @@ namespace MSS.API.Core.V1.Business
             MSSResult mRet = new MSSResult();
             try
             {
-                roleStrActions.updated_time = DateTime.Now;
-                roleStrActions.updated_by = userID;
-                var role=await _RoleRepo.GetByID(roleStrActions.id);
+                roleStrActions.UpdatedTime = DateTime.Now;
+                roleStrActions.UpdatedBy = userID;
+                var role=await _RoleRepo.GetByID(roleStrActions.Id);
                 if (role==null)
                 {
                     mRet.code = (int)ErrType.NoRecord;

@@ -88,7 +88,7 @@ namespace MSS.API.Dao.Implement
             var allworktype = await GetWorkType();
             foreach (var e in ets)
             {
-                var curWorkType = allworktype.ToList().Where(a => a.UserId == e.id);
+                var curWorkType = allworktype.ToList().Where(a => a.UserId == e.Id);
                 e.WorkType = curWorkType.ToList();
             }
         }
@@ -158,11 +158,11 @@ namespace MSS.API.Dao.Implement
                     ";
                 sql += "SELECT LAST_INSERT_ID() ";
                 int newid = await c.QueryFirstOrDefaultAsync<int>(sql, obj);
-                obj.id = newid;
+                obj.Id = newid;
 
                 foreach (var o in obj.WorkType)
                 {
-                    o.UserId = obj.id;
+                    o.UserId = obj.Id;
                     await SaveWorkType(o);
                 }
                 return obj;
@@ -215,10 +215,10 @@ namespace MSS.API.Dao.Implement
                     is_super=@IsSuper
                  where id=@Id", obj);
 
-                await DeleteWorkType(obj.id);
+                await DeleteWorkType(obj.Id);
                 foreach (var o in obj.WorkType)
                 {
-                    o.UserId = obj.id;
+                    o.UserId = obj.Id;
                     await SaveWorkType(o);
                 }
                 return result;

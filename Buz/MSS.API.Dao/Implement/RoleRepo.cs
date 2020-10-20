@@ -126,7 +126,7 @@ namespace MSS.API.Dao.Implement
                     {
                         sql.Clear()
                         .Append(" insert into Role_Action ")
-                        .Append(" values (0," + roleStrActions.id + "," + item + ") ");
+                        .Append(" values (0," + roleStrActions.Id + "," + item + ") ");
                         await c.ExecuteAsync(sql.ToString(), trans);
                     }
                     trans.Commit();

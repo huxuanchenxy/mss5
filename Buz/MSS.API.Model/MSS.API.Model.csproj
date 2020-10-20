@@ -12,4 +12,8 @@
     <PackageReference Include="Dapper.FluentMap" Version="2.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\MSS.API.Common\MSS.API.Common.csproj" />
+  </ItemGroup>
+
 </Project>

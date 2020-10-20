@@ -63,7 +63,7 @@ namespace MSS.API.Core
             services.AddCors(options =>
             {
                 //options.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials());
-                options.AddPolicy("AllowAll", p => p.WithOrigins("http://localhost:8080").AllowAnyMethod().AllowAnyHeader().AllowCredentials());
+                options.AddPolicy("AllowAll", p => p.WithOrigins("*").AllowAnyMethod().AllowAnyHeader().AllowCredentials());
             });
 
             services.AddDistributedMemoryCache();
@@ -127,6 +127,9 @@ namespace MSS.API.Core
             //REDIS_AUTH_KEY_ACTIONINFO = Configuration["redis:tb_action_info"];
             //REDIS_AUTH_KEY_ROLEACTION = Configuration["redis:tb_role_action"];
             //REDIS_AUTH_KEY_USER = Configuration["redis:tb_user"];
+            Const.LINE = Convert.ToInt32(Configuration["InitConst:Line"]);
+            FilePath.BASEFILE = Configuration["InitConst:BaseFile"];
+            FilePath.SHAREFILE = Configuration["InitConst:ShareFile"];
         }
 
     }
