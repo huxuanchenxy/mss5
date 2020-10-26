@@ -86,7 +86,7 @@ namespace MSS.API.Dao.Implement
             return await WithConnection(async c =>
             {
                 var result = await c.QueryAsync<UploadFile>(
-                    "SELECT uf.id ID,uf.file_name FileName,uf.file_path FilePath,uf.file_path FilePath,ufr.type,dt.name as TypeName,dt1.name as SystemResourceName,ufr.system_resource FROM upload_file uf " +
+                    "SELECT uf.id ID,uf.file_name FileName,uf.file_path FilePath,ufr.type,dt.name as TypeName,dt1.name as SystemResourceName,ufr.system_resource FROM upload_file uf " +
                     "left join upload_file_relation ufr on ufr.file_id=uf.id " +
                     "left join dictionary_tree dt on ufr.type=dt.id " +
                     "left join dictionary_tree dt1 on ufr.system_resource=dt1.id " +
@@ -106,7 +106,7 @@ namespace MSS.API.Dao.Implement
             return await WithConnection(async c =>
             {
                 var result = await c.QueryAsync<UploadFile>(
-                    "SELECT uf.*,ufr.type,dt.name as TypeName,dt1.name as SystemResourceName," +
+                    "SELECT uf.id ID,uf.file_name FileName,uf.file_path FilePath,ufr.type,dt.name as TypeName,dt1.name as SystemResourceName," +
                     "ufr.system_resource,ufr.entity_id FROM upload_file uf " +
                     "left join upload_file_relation ufr on ufr.file_id=uf.id " +
                     "left join dictionary_tree dt on ufr.type=dt.id " +
