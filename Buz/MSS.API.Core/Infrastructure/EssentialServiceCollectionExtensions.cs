@@ -29,6 +29,7 @@ namespace MSS.API.Core.Infrastructure
             services.AddTransient<IUploadFileService, UploadFileService>();
             services.AddTransient<IEquipmentService, EquipmentService>();
             services.AddTransient<IImportExcelConfigService, ImportExcelConfigService>();
+            services.AddTransient<IOrgService, OrgService>();
             return services;
         }
     }

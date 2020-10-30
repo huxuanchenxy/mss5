@@ -29,12 +29,18 @@ namespace MSS.API.Dao
             services.AddTransient<IUploadFileRepo<UploadFile>, UploadFileRepo>();
             services.AddTransient<IEquipmentRepo<Equipment>, EquipmentRepo>();
             services.AddTransient<IImportExcelConfigRepo<ImportExcelConfig>, ImportExcelConfigRepo>();
+            services.AddTransient<IOrgRepo<OrgTree>, OrgRepo>();
             //配置列名映射
             FluentMapper.Initialize(config =>
             {
                 config.AddMap(new UserMap());
                 config.AddMap(new EquipmentMap());
                 config.AddMap(new ImportExcelConfigMap());
+                config.AddMap(new OrgTreeMap());
+                config.AddMap(new OrgNodeTypePropertyMap());
+                config.AddMap(new OrgNodeTypeMap());
+                config.AddMap(new OrgNodePropertyMap());
+                config.AddMap(new OrgUserMap());
 
             });
             return services;

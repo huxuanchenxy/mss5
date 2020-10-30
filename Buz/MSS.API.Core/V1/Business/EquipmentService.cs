@@ -388,8 +388,9 @@ namespace MSS.API.Core.V1.Business
         {
             //var _services = await _consulServiceProvider.GetServiceAsync("AuthService");
             var _services = "http://localhost:8981";
-            IHttpClientHelper<ApiResult> h = new HttpClientHelper<ApiResult>();
-            ApiResult r = await h.GetSingleItemRequest(_services + "/api/v1/user/" + userID);
+            //IHttpClientHelper<ApiResult> h = new HttpClientHelper<ApiResult>();
+            //ApiResult r = await h.GetSingleItemRequest(_services + "/api/v1/user/" + userID);
+            ApiResult r = HttpClientHelper.GetResponse<ApiResult>(_services + "/api/v1/user/" + userID);
             JObject jobj = JsonConvert.DeserializeObject<JObject>(r.data.ToString());
             if ((bool)jobj["is_super"])
             {
@@ -399,8 +400,8 @@ namespace MSS.API.Core.V1.Business
             {
                 //_services = await _consulServiceProvider.GetServiceAsync("OrgService");
                 _services = "http://localhost:8082";
-                IHttpClientHelper<ApiResult> httpHelper = new HttpClientHelper<ApiResult>();
-                ApiResult result = await httpHelper.GetSingleItemRequest(_services + "/api/v1/org/topnode/" + userID);
+                //ApiResult result = await httpHelper.GetSingleItemRequest(_services + "/api/v1/org/topnode/" + userID);
+                ApiResult result = HttpClientHelper.GetResponse<ApiResult>(_services + "/api/v1/org/topnode/" + userID);
                 if (result.data != null)
                 {
                     JObject obj = JsonConvert.DeserializeObject<JObject>(result.data.ToString());
