@@ -48,11 +48,34 @@ namespace MSS.API.Core.V1.Controllers
             return Ok(ret.Result);
             //return Ok("");
         }
+
+        [HttpPost("SaveListV2")]
+        public async Task<ActionResult<ApiResult>> SaveV2(FilesRelation filesByEntity)
+        {
+            //List<UploadFileRelation> ufrs = JsonConvert.DeserializeObject<List<UploadFileRelation>>(list);
+            var ret = new ApiResult();
+            return ret;
+            //return Ok("");
+        }
         public class FilesByEntity
         {
             public int entity { get; set; }
             public int systemResource { get; set; }
             public string files { get; set; }
+        }
+
+
+        public class FilesRelation
+        {
+            public int entityId { get; set; }
+            public int systemResource { get; set; }
+            public List<FilesObj> filesObj { get; set; }
+        }
+
+        public class FilesObj
+        {
+            public int fileId { get; set; }
+            public int fileType { get; set; }
         }
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
