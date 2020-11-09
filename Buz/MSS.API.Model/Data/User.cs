@@ -40,11 +40,6 @@ namespace MSS.API.Model.Data
         public string Address { get; set; }
         public string IdPhoto { get; set; }
         public int OutMan { get; set; }
-        public System.DateTime CreatedTime { get; set; }
-        public int CreatedBy { get; set; }
-        public System.DateTime UpdatedTime { get; set; }
-        public int UpdatedBy { get; set; }
-        public bool IsDel { get; set; }
         public bool IsSuper { get; set; }
         public string CreatedName { get; set; }
         public string UpdatedName { get; set; }
@@ -64,7 +59,7 @@ namespace MSS.API.Model.Data
     {
         public UserMap()
         {
-            Map(o => o.id).ToColumn("id");
+            Map(o => o.Id).ToColumn("id");
             Map(o => o.AccName).ToColumn("acc_name");
             Map(o => o.Password).ToColumn("password");
             Map(o => o.RandomNum).ToColumn("random_num");

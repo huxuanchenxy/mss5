@@ -126,9 +126,7 @@ namespace MSS.API.Core.V1.Controllers
         [HttpPut("ChangePwd/{oldPwd}/{newPwd}")]
         public ActionResult ChangePwd(string oldPwd,string newPwd)
         {
-            //int userID = (int)HttpContext.Session.GetInt32("UserID");
-            int userID = 1;
-            var resp = _service.ChangePwd(userID, oldPwd, newPwd);
+            var resp = _service.ChangePwd(oldPwd, newPwd);
             return Ok(resp.Result);
         }
 

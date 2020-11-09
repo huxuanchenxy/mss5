@@ -63,17 +63,17 @@ namespace MSS.API.Core.V1.Business
             try
             {
                 List<DictionaryTree> dts= await _DictionaryRepo.GetSubByCodeOrder(pid);
-                List<DictionaryTree> dts2= await _DictionaryRepo.GetSubByCodesOrder(dts.Select(a=>a.id));
+                List<DictionaryTree> dts2= await _DictionaryRepo.GetSubByCodesOrder(dts.Select(a=>a.Id));
                 foreach (var item in dts)
                 {
                     cascader c = new cascader();
-                    c.value = item.id;
+                    c.value = item.Id;
                     c.label = item.name;
                     c.children = new List<cascader>();
-                    foreach (var item2 in dts2.Where(a=>a.parent_id==item.id))
+                    foreach (var item2 in dts2.Where(a=>a.parent_id==item.Id))
                     {
                         cascader c2 = new cascader();
-                        c2.value = item2.id;
+                        c2.value = item2.Id;
                         c2.label = item2.name;
                         c.children.Add(c2);
                     }

@@ -43,7 +43,7 @@ namespace MSS.API.Dao.Implement
                     mRet.data = tmp.ToList();
                 }
                 mRet.relatedData = await c.QueryFirstOrDefaultAsync<int>(
-                    "select count(*) from Action_Group a where 1=1 "+whereSql.ToString());
+                    "SELECT count(*) FROM Action_Group a where 1=1 "+whereSql.ToString());
                 return mRet;
             });
         }
@@ -52,7 +52,7 @@ namespace MSS.API.Dao.Implement
             return await WithConnection(async c =>
             {
                 var result = await c.QueryFirstOrDefaultAsync<ActionGroup>(
-                    "SELECT * FROM Action_Group WHERE id = @id", new { id = id });
+                    " SELECT * FROM Action_Group WHERE id = @id ", new { id = id });
                 return result;
             });
         }
@@ -79,20 +79,20 @@ namespace MSS.API.Dao.Implement
             });
         }
 
-        public async Task<int> Delete(string[] ids)
-        {
-            return await WithConnection(async c =>
-            {
-                var result = await c.ExecuteAsync(" Delete from Action_Group WHERE id in @ids ", new { ids = ids });
-                return result;
-            });
-        }
-
         public async Task<List<ActionGroup>> GetAll()
         {
             return await WithConnection(async c =>
             {
-                var result = (await c.QueryAsync<ActionGroup>("select * from action_group")).ToList();
+                var result = (await c.QueryAsync<ActionGroup>(" SELECT * FROM action_group ")).ToList();
+                return result;
+            });
+        }
+
+        public async Task<int> Delete(string[] ids)
+        {
+            return await WithConnection(async c =>
+            {
+                var result = await c.ExecuteAsync(" Delete FROM Action_Group WHERE id in @ids ", new { ids = ids });
                 return result;
             });
         }

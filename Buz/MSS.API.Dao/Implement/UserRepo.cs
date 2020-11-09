@@ -58,29 +58,39 @@ namespace MSS.API.Dao.Implement
                 LEFT JOIN USER c ON a.`updated_by`= c.id
                  ");
 
-                var data = await c.QueryAsync<User>(sql.ToString());
-                var total = data.ToList().Count;
-
-                StringBuilder whereSql = new StringBuilder();
-                whereSql.Append(" WHERE a.is_del = 0 ");
+                sql.Append(" WHERE a.is_del = 0 ");
+                
                 if (!string.IsNullOrEmpty(parm.UserName))
                 {
-                    whereSql.Append(" and a.user_name like '%" + parm.UserName.Trim() + "%'");
+                    sql.Append(" and a.user_name like '%" + parm.UserName.Trim() + "%' " );
                 }
                 if (!string.IsNullOrEmpty(parm.JobNumber))
                 {
-                    whereSql.Append(" and a.job_number like '%" + parm.JobNumber.Trim() + "%'");
+                    sql.Append(" and a.job_number like '%" + parm.JobNumber.Trim() + "%' ");
                 }
-                sql.Append(whereSql);
+                var data = await c.QueryAsync<User>(sql.ToString());
+                var total = data.ToList().Count;
+
                 sql.Append(" order by a." + parm.sort + " " + parm.order)
                 .Append(" limit " + (parm.page - 1) * parm.rows + "," + parm.rows);
                 var ets = await c.QueryAsync<User>(sql.ToString());
+                await GetRefList(ets.ToList());
 
                 UserPageView ret = new UserPageView();
                 ret.rows = ets.ToList();
                 ret.total = total;
                 return ret;
             });
+        }
+
+        private async Task GetRefList(List<User> ets)
+        {
+            var allworktype = await GetWorkType();
+            foreach (var e in ets)
+            {
+                var curWorkType = allworktype.ToList().Where(a => a.UserId == e.Id);
+                e.WorkType = curWorkType.ToList();
+            }
         }
 
         public async Task<User> Save(User obj)
@@ -148,11 +158,11 @@ namespace MSS.API.Dao.Implement
                     ";
                 sql += "SELECT LAST_INSERT_ID() ";
                 int newid = await c.QueryFirstOrDefaultAsync<int>(sql, obj);
-                obj.id = newid;
+                obj.Id = newid;
 
                 foreach (var o in obj.WorkType)
                 {
-                    o.UserId = obj.id;
+                    o.UserId = obj.Id;
                     await SaveWorkType(o);
                 }
                 return obj;
@@ -205,10 +215,10 @@ namespace MSS.API.Dao.Implement
                     is_super=@IsSuper
                  where id=@Id", obj);
 
-                await DeleteWorkType(obj.id);
+                await DeleteWorkType(obj.Id);
                 foreach (var o in obj.WorkType)
                 {
-                    o.UserId = obj.id;
+                    o.UserId = obj.Id;
                     await SaveWorkType(o);
                 }
                 return result;
@@ -262,6 +272,7 @@ namespace MSS.API.Dao.Implement
             {
                 var result = (await c.QueryAsync<User>(
                     "select * from user where is_del=" + (int)IsDeleted.no + " and is_super=" + (int)IsSuper.no)).ToList();
+                await GetRefList(result.ToList());
                 return result;
             });
         }
@@ -281,8 +292,8 @@ namespace MSS.API.Dao.Implement
         {
             return await WithConnection(async c =>
             {
-                var result = await c.ExecuteAsync(" update User set password=@password," +
-                    " random_num=@random_num,updated_time=@updated_time,updated_by=@updated_by where id=@id", user);
+                var result = await c.ExecuteAsync(" update user set password=@Password," +
+                    " random_num=@RandomNum,updated_time=@UpdatedTime,updated_by=@UpdatedBy where id=@id", user);
                 return result;
             });
         }
@@ -294,9 +305,9 @@ namespace MSS.API.Dao.Implement
                 Encrypt en = new Encrypt();
                 int r = new Random().Next(1, PWD_RANDOM_MAX);
                 string pwd = en.DoEncrypt(INIT_PASSWORD, r);
-                var result = await c.ExecuteAsync(" update User " +
-                    " set password=@password,updated_time=@updated_time,updated_by=@updated_by where id in @ids",
-                    new { password = pwd, updated_time = DateTime.Now, updated_by = userID, ids = ids });
+                var result = await c.ExecuteAsync(" update user " +
+                    " set password=@Password,random_num=@RandomNum,updated_time=@UpdatedTime,updated_by=@UpdatedBy where id in @ids",
+                    new { Password = pwd, RandomNum = r, UpdatedTime = DateTime.Now, UpdatedBy = userID, ids = ids });
                 return result;
             });
         }
@@ -333,6 +344,19 @@ namespace MSS.API.Dao.Implement
                     a.work_type_id  WorkTypeId,b.name  WorkTypeName FROM user_work_type a 
                     LEFT JOIN dictionary_tree b ON a.work_type_id = b.id 
                     WHERE a.user_id = @user_id ", new { user_id = userid });
+                return result.ToList();
+            });
+        }
+
+        public async Task<List<UserWorkType>> GetWorkType()
+        {
+            return await WithConnection(async c =>
+            {
+                var result = await c.QueryAsync<UserWorkType>(
+                    $@" SELECT a.id,a.user_id UserId,
+                    a.work_type_id  WorkTypeId,b.name  WorkTypeName FROM user_work_type a 
+                    LEFT JOIN dictionary_tree b ON a.work_type_id = b.id 
+                     " );
                 return result.ToList();
             });
         }

@@ -6,11 +6,12 @@ namespace MSS.API.Model.Data
 {
     public abstract class BaseEntity
     {
-        public int id { get; set; }
-        public DateTime created_time { get; set; }
-        public int created_by { get; set; }
-        public DateTime updated_time { get; set; }
-        public int updated_by { get; set; }
+        public int Id { get; set; }
+        public int CreatedBy { get; set; }
+        public DateTime CreatedTime { get; set; }
+        public int UpdatedBy { get; set; }
+        public DateTime UpdatedTime { get; set; }
+        public bool IsDel { get; set; }
     }
 
     public abstract class BaseQueryParm

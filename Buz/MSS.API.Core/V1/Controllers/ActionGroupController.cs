@@ -61,16 +61,18 @@ namespace MSS.API.Core.V1.Controllers
             var resp = _ActionGroupService.Update(actionGroup);
             return Ok(resp.Result);
         }
-        [HttpDelete("{ids}")]
-        public ActionResult Delete(string ids)
-        {
-            var resp = _ActionGroupService.Delete(ids);
-            return Ok(resp.Result);
-        }
+
         [HttpGet("All")]
         public ActionResult GetAll()
         {
             var resp = _ActionGroupService.GetAll();
+            return Ok(resp.Result);
+        }
+
+        [HttpDelete("{ids}")]
+        public ActionResult Delete(string ids)
+        {
+            var resp = _ActionGroupService.Delete(ids);
             return Ok(resp.Result);
         }
     }

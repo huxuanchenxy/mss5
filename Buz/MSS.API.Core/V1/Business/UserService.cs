@@ -22,7 +22,7 @@ namespace MSS.API.Core.V1.Business
         Task<ApiResult> Update(User User);
         Task<ApiResult> Delete(string ids);
         Task<ApiResult> GetAll();
-        Task<ApiResult> ChangePwd(int userID, string oldPwd, string newPwd);
+        Task<ApiResult> ChangePwd(string oldPwd, string newPwd);
         Task<ApiResult> ResetPwd(string ids);
 
         Task<ApiResult> CheckUserLogin(string acc, string password);
@@ -49,7 +49,7 @@ namespace MSS.API.Core.V1.Business
             _repo = userRepo;
             _ActionRepo = actionRepo;
             userID = auth.GetUserId();
-
+            userID = 1;//TODO 上线删掉
             _cache = cache;
         }
         public async Task<ApiResult> GetPageList(UserParm parm)
@@ -107,10 +107,15 @@ namespace MSS.API.Core.V1.Business
                     user.Password = en.DoEncrypt(INIT_PASSWORD,r);
                     user.RandomNum = r;
                     DateTime dt = DateTime.Now;
-                    user.updated_time = dt;
-                    user.created_time = dt;
-                    user.created_by = userID;
-                    user.updated_by = userID;
+                    user.UpdatedTime = dt;
+                    user.CreatedTime = dt;
+                    user.CreatedBy = userID;
+                    user.UpdatedBy = userID;
+                    //如果是外部人员系统生成accname
+                    //if (user.OutMan == 1)
+                    //{
+                    //    user.AccName = "line5" + DateTime.Now.ToString("yyyyMMddHHmmssSSS");
+                    //}
                     mRet.data = await _repo.Save(user);
                     await SaveRedis();
                     mRet.code = (int)ErrType.OK;
@@ -135,8 +140,8 @@ namespace MSS.API.Core.V1.Business
             ApiResult mRet = new ApiResult();
             try
             {
-                user.updated_time = DateTime.Now;
-                user.updated_by = userID;
+                user.UpdatedTime = DateTime.Now;
+                user.UpdatedBy = userID;
                 mRet.data = await _repo.Update(user);
                 await SaveRedis();
                 mRet.code = (int)ErrType.OK;
@@ -194,7 +199,7 @@ namespace MSS.API.Core.V1.Business
             }
         }
 
-        public async Task<ApiResult> ChangePwd(int userID,string oldPwd, string newPwd)
+        public async Task<ApiResult> ChangePwd(string oldPwd, string newPwd)
         {
             ApiResult mRet = new ApiResult();
             try
@@ -212,8 +217,8 @@ namespace MSS.API.Core.V1.Business
                     u.Password = en.DoEncrypt(newPwd,r);
                     u.RandomNum = r;
                     DateTime dt = DateTime.Now;
-                    u.updated_time = dt;
-                    u.updated_by = userID;
+                    u.UpdatedTime = dt;
+                    u.UpdatedBy = userID;
                     mRet.data = await _repo.ChangePwd(u);
                     mRet.code = (int)ErrType.OK;
                 }
@@ -272,7 +277,7 @@ namespace MSS.API.Core.V1.Business
                     //    mRet.relatedData = ui;
                     //    return mRet;
                     //}
-                    mRet.data = ui.id;
+                    mRet.data = ui.Id;
                 }
                 else
                 {

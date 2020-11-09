@@ -81,10 +81,10 @@ namespace MSS.API.Core.V1.Business
             try
             { 
                 DateTime dt = DateTime.Now;
-                action.updated_time = dt;
-                action.created_time = dt;
-                action.updated_by = userID;
-                action.created_by = userID;
+                action.UpdatedTime = dt;
+                action.CreatedTime = dt;
+                action.UpdatedBy = userID;
+                action.CreatedBy = userID;
                 mRet.data = await _ActionRepo.Add(action);
                 await SaveRedis();
                 mRet.code = (int)ErrType.OK;
@@ -103,8 +103,8 @@ namespace MSS.API.Core.V1.Business
             MSSResult mRet = new MSSResult();
             try
             {
-                action.updated_time = DateTime.Now;
-                action.updated_by = userID;
+                action.UpdatedTime = DateTime.Now;
+                action.UpdatedBy = userID;
                 mRet.data = await _ActionRepo.Update(action);
                 await SaveRedis();
                 mRet.code = (int)ErrType.OK;
@@ -153,22 +153,7 @@ namespace MSS.API.Core.V1.Business
             }
         }
 
-        public async Task<MSSResult> GetMenu()
-        {
-            MSSResult mRet = new MSSResult();
-            try
-            {
-                mRet.data = await _ActionRepo.GetMenu();
-                mRet.code = (int)ErrType.OK;
-                return mRet;
-            }
-            catch (Exception ex)
-            {
-                mRet.code = (int)ErrType.SystemErr;
-                mRet.msg = ex.Message;
-                return mRet;
-            }
-        }
+        
 
         /// <summary>
         /// 非超级用户可配置的所有权限
@@ -184,6 +169,23 @@ namespace MSS.API.Core.V1.Business
                 laa = await _ActionRepo.GetActionAll();
                 mRet.data = ActionHelper.GetActionTree(laa.Where(
                     a => a.Level == (int)ACTION_LEVEL.AllowSelection).ToList());
+                mRet.code = (int)ErrType.OK;
+                return mRet;
+            }
+            catch (Exception ex)
+            {
+                mRet.code = (int)ErrType.SystemErr;
+                mRet.msg = ex.Message;
+                return mRet;
+            }
+        }
+
+        public async Task<MSSResult> GetMenu()
+        {
+            MSSResult mRet = new MSSResult();
+            try
+            {
+                mRet.data = await _ActionRepo.GetMenu();
                 mRet.code = (int)ErrType.OK;
                 return mRet;
             }
