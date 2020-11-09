@@ -77,17 +77,17 @@ namespace MSS.API.Core.V1.Controllers
             return Ok(resp.Result);
         }
 
-        [HttpGet("Menu")]
-        public ActionResult GetMenu()
-        {
-            var resp = _ActionService.GetMenu();
-            return Ok(resp.Result);
-        }
-
         [HttpGet("ActionTree")]
         public ActionResult GetActionTree()
         {
             var resp = _ActionService.GetActionTree();
+            return Ok(resp.Result);
+        }
+
+        [HttpGet("Menu")]
+        public ActionResult GetMenu()
+        {
+            var resp = _ActionService.GetMenu();
             return Ok(resp.Result);
         }
     }

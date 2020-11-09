@@ -46,28 +46,6 @@ namespace MSS.API.Core.V1.Business
                 return mRet;
             }
         }
-        public async Task<MSSResult> GetByID(int id)
-        {
-            MSSResult mRet = new MSSResult();
-            try
-            {
-                if (id==0)
-                {
-                    mRet.code = (int)ErrType.ErrParm;
-                    mRet.msg = "参数不正确，id不可为0";
-                    return mRet;
-                }
-                mRet.data = await _ActionGroupRepo.GetByID(id);
-                mRet.code = (int)ErrType.OK;
-                return mRet;
-            }
-            catch (Exception ex)
-            {
-                mRet.code = (int)ErrType.SystemErr;
-                mRet.msg = ex.Message;
-                return mRet;
-            }
-        }
 
         public async Task<MSSResult> Add(ActionGroup actionGroup)
         {
@@ -110,13 +88,30 @@ namespace MSS.API.Core.V1.Business
             }
         }
 
+        public async Task<MSSResult> GetAll()
+        {
+            MSSResult mRet = new MSSResult();
+            try
+            {
+                mRet.data = await _ActionGroupRepo.GetAll();
+                mRet.code = (int)ErrType.OK;
+                return mRet;
+            }
+            catch (Exception ex)
+            {
+                mRet.code = (int)ErrType.SystemErr;
+                mRet.msg = ex.Message;
+                return mRet;
+            }
+        }
+
         public async Task<MSSResult> Delete(string ids)
         {
             MSSResult mRet = new MSSResult();
             try
             {
-                var action =await _ActionRepo.GetByActionGroup(ids.Split(','));
-                if (action.Count()>0)
+                var action = await _ActionRepo.GetByActionGroup(ids.Split(','));
+                if (action.Count() > 0)
                 {
                     mRet.code = (int)ErrType.Associated;
                     mRet.msg = "权限组下挂有权限，不允许删除";
@@ -134,12 +129,18 @@ namespace MSS.API.Core.V1.Business
             }
         }
 
-        public async Task<MSSResult> GetAll()
+        public async Task<MSSResult> GetByID(int id)
         {
             MSSResult mRet = new MSSResult();
             try
             {
-                mRet.data = await _ActionGroupRepo.GetAll();
+                if (id == 0)
+                {
+                    mRet.code = (int)ErrType.ErrParm;
+                    mRet.msg = "参数不正确，id不可为0";
+                    return mRet;
+                }
+                mRet.data = await _ActionGroupRepo.GetByID(id);
                 mRet.code = (int)ErrType.OK;
                 return mRet;
             }

@@ -31,13 +31,13 @@ namespace MSS.API.Dao.Implement
                 {
                     whereSql.Append(" and a.action_name like '%"+ parm.searchName + "%' ");
                 }
-                if (parm.searchGroup!=null)
-                {
-                    whereSql.Append(" and a.group_id="+ parm.searchGroup);
-                }
                 if (parm.searchParent != null)
                 {
                     whereSql.Append(" and a.parent_menu=" + parm.searchParent);
+                }
+                if (parm.searchGroup != null)
+                {
+                    whereSql.Append(" and a.group_id=" + parm.searchGroup);
                 }
                 sql.Append(whereSql)
                 .Append(" order by a." + parm.sort + " " + parm.order)
@@ -95,14 +95,6 @@ namespace MSS.API.Dao.Implement
             });
         }
 
-        public async Task<List<ActionInfo>> GetAll()
-        {
-            return await WithConnection(async c =>
-            {
-                var result = (await c.QueryAsync<ActionInfo>("select * from Action_Info")).ToList();
-                return result;
-            });
-        }
 
         public async Task<List<ActionInfo>> GetMenu()
         {
@@ -180,8 +172,18 @@ namespace MSS.API.Dao.Implement
             return await WithConnection(async c =>
             {
                 StringBuilder sql = new StringBuilder();
-                sql.Append(" SELECT action_id from role_action where role_id=@id");
+                sql.Append(" SELECT action_id from role_action where role_id=@id ");
                 var result = (await c.QueryAsync<int>(sql.ToString(), new { id = roleID })).ToList();
+                return result;
+            });
+        }
+
+
+        public async Task<List<ActionInfo>> GetAll()
+        {
+            return await WithConnection(async c =>
+            {
+                var result = (await c.QueryAsync<ActionInfo>("select * from Action_Info")).ToList();
                 return result;
             });
         }

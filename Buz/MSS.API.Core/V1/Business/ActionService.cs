@@ -153,22 +153,7 @@ namespace MSS.API.Core.V1.Business
             }
         }
 
-        public async Task<MSSResult> GetMenu()
-        {
-            MSSResult mRet = new MSSResult();
-            try
-            {
-                mRet.data = await _ActionRepo.GetMenu();
-                mRet.code = (int)ErrType.OK;
-                return mRet;
-            }
-            catch (Exception ex)
-            {
-                mRet.code = (int)ErrType.SystemErr;
-                mRet.msg = ex.Message;
-                return mRet;
-            }
-        }
+        
 
         /// <summary>
         /// 非超级用户可配置的所有权限
@@ -184,6 +169,23 @@ namespace MSS.API.Core.V1.Business
                 laa = await _ActionRepo.GetActionAll();
                 mRet.data = ActionHelper.GetActionTree(laa.Where(
                     a => a.Level == (int)ACTION_LEVEL.AllowSelection).ToList());
+                mRet.code = (int)ErrType.OK;
+                return mRet;
+            }
+            catch (Exception ex)
+            {
+                mRet.code = (int)ErrType.SystemErr;
+                mRet.msg = ex.Message;
+                return mRet;
+            }
+        }
+
+        public async Task<MSSResult> GetMenu()
+        {
+            MSSResult mRet = new MSSResult();
+            try
+            {
+                mRet.data = await _ActionRepo.GetMenu();
                 mRet.code = (int)ErrType.OK;
                 return mRet;
             }
