@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MSS.API.Common;
 using MSS.API.Core.Infrastructure;
 using MSS.API.Core.V1.Business;
 using MSS.API.Model.Data;
@@ -28,67 +29,98 @@ namespace MSS.API.Core.V1.Controllers
 
         }
         [HttpGet("QueryList")]
-        public ActionResult GetPageByParm([FromQuery] ActionQueryParm parm)
+        public async Task<ActionResult<ApiResult>> GetPageByParm([FromQuery] ActionQueryParm parm)
         {
-            //ActionQueryParm parm = new ActionQueryParm();
-
-            var ret = _ActionService.GetPageByParm(parm).Result;
+            ApiResult resp = new ApiResult();
+            var ret = await _ActionService.GetPageByParm(parm);
             if (ret.code==(int)ErrType.OK)
             {
                 var data = new { rows = ret.data, total = ret.relatedData };
-                var resp = new { code = ret.code, data = data };
-                return Ok(resp);
+                //var resp = new { code = ret.code, data = data };
+                resp.code = Code.Success;
+                resp.data = data;
+                return resp;
             }
             else
             {
-                var resp = new { code = ret.code, msg = ret.msg };
-                return Ok(resp);
+                resp.code = 0;
+                resp.msg = ret.msg;
+                return resp;
             }
         }
         [HttpGet("{id}")]
-        public ActionResult GetByID(int id)
+        public async Task<ActionResult<ApiResult>> GetByID(int id)
         {
-            var resp = _ActionService.GetByID(id);
-            //var resp = _ActionService.GetStrByID(id);
-            return Ok(resp.Result);
+            ApiResult resp = new ApiResult();
+            var ret =  await _ActionService.GetByID(id);
+            if (ret != null)
+            {
+                resp.code = 0;
+                resp.data = ret.data;
+            }
+            return resp;
         }
         [HttpPost("Add")]
-        public ActionResult Add(ActionInfo action)
+        public async Task<ActionResult<ApiResult>> Add(ActionInfo action)
         {
-            var resp = _ActionService.Add(action);
-            return Ok(resp.Result);
+            await _ActionService.Add(action);
+            ApiResult resp = new ApiResult();
+            resp.code = 0;
+            return resp;
         }
         [HttpPut("Update")]
-        public ActionResult Update(ActionInfo action)
+        public async Task<ActionResult<ApiResult>> Update(ActionInfo action)
         {
-            var resp = _ActionService.Update(action);
-            return Ok(resp.Result);
+            await _ActionService.Update(action);
+            ApiResult resp = new ApiResult();
+            resp.code = 0;
+            return resp;
         }
         [HttpDelete("{ids}")]
-        public ActionResult Delete(string ids)
+        public async Task<ActionResult<ApiResult>> Delete(string ids)
         {
-            var resp = _ActionService.Delete(ids);
-            return Ok(resp.Result);
+            await _ActionService.Delete(ids);
+            ApiResult resp = new ApiResult();
+            resp.code = 0;
+            return resp;
         }
         [HttpGet("All")]
-        public ActionResult GetAll()
+        public async Task<ActionResult<ApiResult>> GetAll()
         {
-            var resp = _ActionService.GetAll();
-            return Ok(resp.Result);
+            ApiResult resp = new ApiResult();
+            var ret =  await _ActionService.GetAll();
+            if (ret != null)
+            {
+                resp.code = 0;
+                resp.data = ret.data;
+            }
+            return resp;
         }
 
         [HttpGet("ActionTree")]
-        public ActionResult GetActionTree()
+        public async Task<ActionResult<ApiResult>> GetActionTree()
         {
-            var resp = _ActionService.GetActionTree();
-            return Ok(resp.Result);
+            ApiResult resp = new ApiResult();
+            var ret = await _ActionService.GetActionTree();
+            if (ret != null)
+            {
+                resp.code = 0;
+                resp.data = ret.data;
+            }
+            return resp;
         }
 
         [HttpGet("Menu")]
-        public ActionResult GetMenu()
+        public async Task<ActionResult<ApiResult>> GetMenu()
         {
-            var resp = _ActionService.GetMenu();
-            return Ok(resp.Result);
+            ApiResult resp = new ApiResult();
+            var ret = await _ActionService.GetMenu();
+            if (ret != null)
+            {
+                resp.code = 0;
+                resp.data = ret.data;
+            }
+            return resp;
         }
     }
 }

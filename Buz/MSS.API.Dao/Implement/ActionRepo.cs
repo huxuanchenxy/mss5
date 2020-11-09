@@ -172,7 +172,7 @@ namespace MSS.API.Dao.Implement
             return await WithConnection(async c =>
             {
                 StringBuilder sql = new StringBuilder();
-                sql.Append(" SELECT action_id from role_action where role_id=@id ");
+                sql.Append(" SELECT action_id from role_action where role_id=@id");
                 var result = (await c.QueryAsync<int>(sql.ToString(), new { id = roleID })).ToList();
                 return result;
             });
