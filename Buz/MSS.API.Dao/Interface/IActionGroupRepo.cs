@@ -11,13 +11,12 @@ namespace MSS.API.Dao.Interface
     public interface IActionGroupRepo<T> where T:BaseEntity
     {
         Task<MSSResult<ActionGroupView>> GetPageByParm(ActionGroupQueryParm parm);
-        Task<ActionGroup> GetByID(int Id);
-
         Task<int> Add(ActionGroup actionGroup);
 
         Task<int> Update(ActionGroup actionGroup);
 
         Task<int> Delete(string[] ids);
+        Task<ActionGroup> GetByID(int Id);
 
         Task<List<ActionGroup>> GetAll();
     }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MSS.API.Common;
 using MSS.API.Core.Infrastructure;
 using MSS.API.Core.V1.Business;
 using MSS.API.Model.Data;
@@ -28,52 +29,74 @@ namespace MSS.API.Core.V1.Controllers
 
         }
         [HttpGet("QueryList")]
-        public ActionResult GetPageByParm([FromQuery] ActionGroupQueryParm parm)
+        public async Task<ActionResult<ApiResult>> GetPageByParm([FromQuery] ActionGroupQueryParm parm)
         {
-            var ret = _ActionGroupService.GetPageByParm(parm).Result;
+            ApiResult resp = new ApiResult();
+            var ret = await _ActionGroupService.GetPageByParm(parm);
             if (ret.code==(int)ErrType.OK)
             {
                 var data = new { rows = ret.data, total = ret.relatedData };
-                var resp = new { code = ret.code, data = data };
-                return Ok(resp);
+                resp.code = 0;
+                resp.data = data;
+                return resp;
             }
             else
             {
-                var resp = new { code = ret.code, msg = ret.msg };
-                return Ok(resp);
+                resp.code = Code.Failure;
+                resp.msg = ret.msg;
+                return resp;
             }
         }
         [HttpGet("{id}")]
-        public ActionResult GetByID(int id)
+        public async Task<ActionResult<ApiResult>> GetByID(int id)
         {
-            var resp = _ActionGroupService.GetByID(id);
-            return Ok(resp.Result);
+            ApiResult resp = new ApiResult();
+            var ret = await _ActionGroupService.GetByID(id);
+            if (ret != null)
+            {
+                resp.code = Code.Success;
+                resp.data = ret.data;
+            }
+            return resp;
         }
+
         [HttpPost("Add")]
-        public ActionResult Add(ActionGroup actionGroup)
+        public async Task<ActionResult<ApiResult>> Add(ActionGroup actionGroup)
         {
-            var resp = _ActionGroupService.Add(actionGroup);
-            return Ok(resp.Result);
+            await _ActionGroupService.Add(actionGroup);
+            ApiResult resp = new ApiResult();
+            resp.code = Code.Success;
+            return resp;
         }
         [HttpPut("Update")]
-        public ActionResult Update(ActionGroup actionGroup)
+        public async Task<ActionResult<ApiResult>> Update(ActionGroup actionGroup)
         {
-            var resp = _ActionGroupService.Update(actionGroup);
-            return Ok(resp.Result);
+            await _ActionGroupService.Update(actionGroup);
+            ApiResult resp = new ApiResult();
+            resp.code = Code.Success;
+            return resp;
         }
 
         [HttpGet("All")]
-        public ActionResult GetAll()
+        public async Task<ActionResult<ApiResult>> GetAll()
         {
-            var resp = _ActionGroupService.GetAll();
-            return Ok(resp.Result);
+            ApiResult resp = new ApiResult();
+            var ret = await _ActionGroupService.GetAll();
+            if (ret != null)
+            {
+                resp.code = Code.Success;
+                resp.data = ret.data;
+            }
+            return resp;
         }
 
         [HttpDelete("{ids}")]
-        public ActionResult Delete(string ids)
+        public async Task<ActionResult<ApiResult>> Delete(string ids)
         {
-            var resp = _ActionGroupService.Delete(ids);
-            return Ok(resp.Result);
+            await _ActionGroupService.Delete(ids);
+            ApiResult resp = new ApiResult();
+            resp.code = Code.Success;
+            return resp;
         }
     }
 }

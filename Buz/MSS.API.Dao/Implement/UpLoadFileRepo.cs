@@ -59,14 +59,6 @@ namespace MSS.API.Dao.Implement
             });
         }
 
-        public async Task<int> Delete(int id)
-        {
-            return await WithConnection(async c =>
-            {
-                var result = await c.ExecuteAsync(" Delete from upload_file WHERE id=@id ", new { id = id});
-                return result;
-            });
-        }
 
         public async Task<UploadFile> GetByID(int id)
         {
@@ -124,6 +116,15 @@ namespace MSS.API.Dao.Implement
             });
         }
 
+
+        public async Task<int> Delete(int id)
+        {
+            return await WithConnection(async c =>
+            {
+                var result = await c.ExecuteAsync(" Delete from upload_file WHERE id=@id ", new { id = id });
+                return result;
+            });
+        }
         public async Task<List<UploadFile>> ListAll()
         {
             return await WithConnection(async c =>
