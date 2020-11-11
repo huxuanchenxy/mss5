@@ -35,6 +35,7 @@ namespace MSS.API.Dao
             //配置列名映射
             FluentMapper.Initialize(config =>
             {
+                config.AddMap(new BaseEntityMap());
                 config.AddMap(new UserMap());
                 config.AddMap(new EquipmentMap());
                 config.AddMap(new ImportExcelConfigMap());
@@ -44,7 +45,7 @@ namespace MSS.API.Dao
                 config.AddMap(new OrgNodePropertyMap());
                 config.AddMap(new OrgUserMap());
                 config.AddMap(new UserCredMap());
-
+                
             });
             return services;
         }

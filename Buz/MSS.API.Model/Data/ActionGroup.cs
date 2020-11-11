@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dapper.FluentMap.Mapping;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -13,5 +14,10 @@ namespace MSS.API.Model.Data
         public int group_type { get; set; }
         public int group_order { get; set; }
 
+    }
+
+    public class ActionGroupMap : BaseEntityMap
+    {
+        public ActionGroupMap() : base() { }
     }
 }

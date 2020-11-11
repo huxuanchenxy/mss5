@@ -55,7 +55,7 @@ namespace MSS.API.Dao.Implement
             {
                 var result = await c.ExecuteAsync(" insert into Action_Group " +
                     " values (0,@group_name,@request_url,@group_type,@group_order,@icon, " +
-                    " @active_icon,@created_time,@created_by,@updated_time,@updated_by) ", actionGroup);
+                    " @active_icon,@CreatedTime,@CreatedBy,@UpdatedTime,@UpdatedBy) ", actionGroup);
                 return result;
             });
         }
@@ -66,7 +66,7 @@ namespace MSS.API.Dao.Implement
             {
                 var result = await c.ExecuteAsync(" UPDATE Action_Group " +
                     " set group_name=@group_name,request_url=@request_url,group_type=@group_type,group_order=@group_order,icon=@icon, " +
-                    " active_icon=@active_icon,updated_time=@updated_time,updated_by=@updated_by where id=@id", actionGroup);
+                    " active_icon=@active_icon,updated_time=@UpdatedTime,updated_by=@UpdatedBy where id=@id", actionGroup);
                 return result;
             });
         }
