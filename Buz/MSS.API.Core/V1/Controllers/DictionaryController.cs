@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MSS.API.Common;
 using MSS.API.Core.V1.Business;
+using System.Threading.Tasks;
 
 namespace MSS.API.Core.V1.Controllers
 {
@@ -18,77 +20,56 @@ namespace MSS.API.Core.V1.Controllers
 
         }
         [HttpGet("SubCode/{code}")]
-        public ActionResult GetSubByCode(int code)
+        public async Task<ActionResult<ApiResult>> GetSubByCode(int code)
         {
-            var resp = _DictionaryService.GetSubByCode(code);
-            return Ok(resp.Result);
+            ApiResult resp = new ApiResult();
+            var ret = await _DictionaryService.GetSubByCode(code);
+            if (ret != null)
+            {
+                resp.code = Code.Success;
+                resp.data = ret.data;
+            }
+            return resp;
         }
 
         [HttpGet("SubCodeByOrder/{code}")]
-        public ActionResult GetSubByCodeOrder(int code)
+        public async Task<ActionResult<ApiResult>> GetSubByCodeOrder(int code)
         {
-            var resp = _DictionaryService.GetSubByCodeOrder(code);
-            return Ok(resp.Result);
+            ApiResult resp = new ApiResult();
+            var ret = await _DictionaryService.GetSubByCodeOrder(code);
+            if (ret != null)
+            {
+                resp.code = Code.Success;
+                resp.data = ret.data;
+            }
+            return resp;
         }
 
         [HttpGet("GetTwoCascader/{code}")]
-        public ActionResult GetTwoCascader(int code)
+        public async Task<ActionResult<ApiResult>> GetTwoCascader(int code)
         {
-            var resp = _DictionaryService.GetTwoCascader(code);
-            return Ok(resp.Result);
+            ApiResult resp = new ApiResult();
+            var ret = await _DictionaryService.GetTwoCascader(code);
+            if (ret != null)
+            {
+                resp.code = Code.Success;
+                resp.data = ret.data;
+            }
+            return resp;
         }
 
         [HttpGet("BusinessType/{code}")]
-        public ActionResult GetByParent(int code)
+        public async Task<ActionResult<ApiResult>> GetByParent(int code)
         {
-            var resp = _DictionaryService.GetByParent(code);
-            return Ok(resp.Result);
+            ApiResult resp = new ApiResult();
+            var ret = await _DictionaryService.GetByParent(code);
+            if (ret != null)
+            {
+                resp.code = Code.Success;
+                resp.data = ret.data;
+            }
+            return resp;
         }
-        //[HttpGet("QueryList")]
-        //public ActionResult GetPageByParm([FromQuery] DictionaryQueryParm parm)
-        //{
-        //    var ret = _DictionaryService.GetPageByParm(parm).Result;
-        //    if (ret.code==(int)ErrType.OK)
-        //    {
-        //        var data = new { rows = ret.data, total = ret.relatedData };
-        //        var resp = new { code = ret.code, data = data };
-        //        return Ok(resp);
-        //    }
-        //    else
-        //    {
-        //        var resp = new { code = ret.code, msg = ret.msg };
-        //        return Ok(resp);
-        //    }
-        //}
-        //[HttpGet("{id}")]
-        //public ActionResult GetByID(int id)
-        //{
-        //    var resp = _DictionaryService.GetByID(id);
-        //    return Ok(resp.Result);
-        //}
-        //[HttpPost("Add")]
-        //public ActionResult Add(Dictionary Dictionary)
-        //{
-        //    var resp = _DictionaryService.Add(Dictionary);
-        //    return Ok(resp.Result);
-        //}
-        //[HttpPut("Update")]
-        //public ActionResult Update(Dictionary Dictionary)
-        //{
-        //    var resp = _DictionaryService.Update(Dictionary);
-        //    return Ok(resp.Result);
-        //}
-        //[HttpDelete("{ids}")]
-        //public ActionResult Delete(string ids)
-        //{
-        //    var resp = _DictionaryService.Delete(ids);
-        //    return Ok(resp.Result);
-        //}
-        //[HttpGet("SubCode/{code}")]
-        //public ActionResult GetSubByCode(string code)
-        //{
-        //    var resp = _DictionaryService.GetSubByCode(code);
-        //    return Ok(resp.Result);
-        //}
+        
     }
 }

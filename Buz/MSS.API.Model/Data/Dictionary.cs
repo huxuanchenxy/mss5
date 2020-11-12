@@ -12,4 +12,11 @@ namespace MSS.API.Model.Data
         public string sub_code_name { get; set; }
         public string description { get; set; }
     }
+
+    public class cascader
+    {
+        public int value { get; set; }
+        public string label { get; set; }
+        public List<cascader> children { get; set; }
+    }
 }

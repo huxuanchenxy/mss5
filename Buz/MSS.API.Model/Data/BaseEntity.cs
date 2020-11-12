@@ -12,6 +12,7 @@ namespace MSS.API.Model.Data
         public DateTime CreatedTime { get; set; }
         public int UpdatedBy { get; set; }
         public DateTime UpdatedTime { get; set; }
+
         public bool IsDel { get; set; }
     }
 
