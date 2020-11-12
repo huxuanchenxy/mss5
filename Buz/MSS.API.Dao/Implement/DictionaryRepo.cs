@@ -40,7 +40,7 @@ namespace MSS.API.Dao.Implement
             {
                 var result = (await c.QueryAsync<DictionaryRelation>(
                     "SELECT dr.*,dt.name,dt.ext FROM dictionary_relation dr " +
-                    "left join dictionary_tree dt on dr.business_type=dt.id " +
+                    "LEFT JOIN dictionary_tree dt on dr.business_type=dt.id " +
                     "where parent_business_type=@pid", new { pid = pid })).ToList();
                 return result;
             });
