@@ -57,22 +57,14 @@ namespace MSS.API.Dao.Implement
                 return mRet;
             });
         }
-        public async Task<Role> GetByID(int id)
-        {
-            return await WithConnection(async c =>
-            {
-                var result = await c.QueryFirstOrDefaultAsync<Role>(
-                    "SELECT * FROM Role WHERE id = @id", new { id = id });
-                return result;
-            });
-        }
+
 
         public async Task<bool> IsNameRepeat(string name)
         {
             return await WithConnection(async c =>
             {
                 var result = await c.QueryFirstOrDefaultAsync<int>(
-                    "SELECT count(*) FROM Role WHERE role_name = @name", new { name = name });
+                    "SELECT count(1) FROM Role WHERE role_name = @name", new { name = name });
                 return result>0?true:false;
             });
         }
@@ -87,7 +79,7 @@ namespace MSS.API.Dao.Implement
                 {
                     sql.Append(" insert into Role ")
                     .Append(" values (0,@role_name,@description, ")
-                    .Append(" @created_time,@created_by,@updated_time,@updated_by); ")
+                    .Append(" @CreatedTime,@CreatedBy,@UpdatedTime,@UpdatedBy); ")
                     .Append("select last_insert_id()");
                     int result = await c.QueryFirstOrDefaultAsync<int>(sql.ToString(), roleStrActions, trans);
                     foreach (string item in roleStrActions.actions.Split(','))
@@ -118,7 +110,7 @@ namespace MSS.API.Dao.Implement
                 {
                     sql.Append(" update Role ")
                     .Append(" set role_name=@role_name,description=@description, ")
-                    .Append(" updated_time=@updated_time,updated_by=@updated_by where id=@id ");
+                    .Append(" updated_time=@UpdatedTime,updated_by=@UpdatedBy where id=@id ");
                     int result = await c.ExecuteAsync(sql.ToString(), roleStrActions, trans);
                     sql.Clear().Append("delete from Role_Action where role_id=@id");
                     await c.ExecuteAsync(sql.ToString(), roleStrActions, trans);
@@ -175,6 +167,16 @@ namespace MSS.API.Dao.Implement
             return await WithConnection(async c =>
             {
                 var result = (await c.QueryAsync<RoleAction>("select * from role_action")).ToList();
+                return result;
+            });
+        }
+
+        public async Task<Role> GetByID(int id)
+        {
+            return await WithConnection(async c =>
+            {
+                var result = await c.QueryFirstOrDefaultAsync<Role>(
+                    "SELECT * FROM Role WHERE id = @id", new { id = id });
                 return result;
             });
         }

@@ -12,7 +12,6 @@ namespace MSS.API.Dao.Interface
     {
         Task<MSSResult<RoleView>> GetPageByParm(RoleQueryParm parm);
         Task<Role> GetByID(int Id);
-        Task<bool> IsNameRepeat(string name);
         Task<int> Add(RoleStrActions roleStrActions);
 
         Task<int> Update(RoleStrActions roleStrActions);
@@ -21,5 +20,6 @@ namespace MSS.API.Dao.Interface
 
         Task<List<Role>> GetAll();
         Task<List<RoleAction>> GetRoleActionAll();
+        Task<bool> IsNameRepeat(string name);
     }
 }

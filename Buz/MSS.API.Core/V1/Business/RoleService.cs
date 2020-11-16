@@ -38,8 +38,6 @@ namespace MSS.API.Core.V1.Business
             _ActionRepo = actionRepo;
 
             userID = auth.GetUserId();
-
-            //_configuration = configuration;
             _cache = cache;
         }
         public async Task<MSSResult<RoleView>> GetPageByParm(RoleQueryParm parm)
