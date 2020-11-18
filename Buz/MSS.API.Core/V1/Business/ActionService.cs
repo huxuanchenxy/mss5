@@ -167,8 +167,12 @@ namespace MSS.API.Core.V1.Business
                 List<ActionAll> laa = new List<ActionAll>();
                 //允许勾选
                 laa = await _ActionRepo.GetActionAll();
-                mRet.data = ActionHelper.GetActionTree(laa.Where(
-                    a => a.Level == (int)ACTION_LEVEL.AllowSelection).ToList());
+                //mRet.data = ActionHelper.GetActionTree(laa.Where(
+                //    a => a.Level == (int)ACTION_LEVEL.AllowSelection).ToList());
+                var list = laa.Where(
+                    a => a.Level == (int)ACTION_LEVEL.AllowSelection).ToList();
+                var trees = ActionHelper.ConvertToTree(list);
+                var treenodes = ActionHelper.BuildTreeRecursive(trees, 0);
                 mRet.code = (int)ErrType.OK;
                 return mRet;
             }

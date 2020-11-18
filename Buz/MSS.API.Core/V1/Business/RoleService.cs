@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using CSRedis;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Caching.Distributed;
+using MSS.API.Common;
 
 namespace MSS.API.Core.V1.Business
 {
@@ -55,7 +56,9 @@ namespace MSS.API.Core.V1.Business
                 foreach (var item in mRet.data)
                 {
                     List<ActionAll> actionAll = lra.Where(a => a.roleID == item.Id).ToList<ActionAll>();
-                    item.action_trees = ActionHelper.GetActionTree(actionAll);
+                    //item.action_trees = ActionHelper.GetActionTree(actionAll);
+                    List<ActionTree> actiontree = ActionHelper.ConvertToTree(actionAll);
+                    item.action_trees = ActionHelper.BuildTreeRecursive(actiontree,0);
                 }
                 mRet.code = (int)ErrType.OK;
                 return mRet;
@@ -207,6 +210,25 @@ namespace MSS.API.Core.V1.Business
                 mRet.code = (int)ErrType.SystemErr;
                 mRet.msg = ex.Message;
                 return mRet;
+            }
+        }
+
+        public async Task<ApiResult> GetActionTree()
+        {
+            ApiResult ret = new ApiResult();
+            try
+            {
+                var list = await _ActionRepo.GetActionAll();
+                var tmp =  ActionHelper.ConvertToTree(list);
+                var result = ActionHelper.BuildTreeRecursive(tmp, 0);
+                ret.data = result;
+                return ret;
+            }
+            catch (Exception ex)
+            {
+                ret.code = Code.Failure;
+                
+                return ret;
             }
         }
 

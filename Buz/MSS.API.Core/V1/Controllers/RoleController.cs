@@ -40,6 +40,16 @@ namespace MSS.API.Core.V1.Controllers
                 return resp;
             }
         }
+
+        //TODO 测试
+        [HttpGet("ActionTree")]
+        public async Task<ActionResult<ApiResult>> GetActionTree()
+        {
+            ApiResult resp = new ApiResult();
+            var ret = await _RoleService.GetActionTree();
+            return ret;
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<ApiResult>> GetByID(int id)
         {
