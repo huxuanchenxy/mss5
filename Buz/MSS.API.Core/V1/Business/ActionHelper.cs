@@ -102,7 +102,8 @@ namespace MSS.API.Core.V1.Business
         {
             List<ActionTree> lat = new List<ActionTree>();
             IEnumerable<IGrouping<int, ActionAll>> groupAction = laa.GroupBy(a => a.GroupID);
-            foreach (IGrouping<int, ActionAll> group in groupAction.Where(a => a.Key != 0))
+            var tmpgroup = groupAction.Where(a => a.Key != 0);
+            foreach (IGrouping<int, ActionAll> group in tmpgroup)
             {
                 ActionTree at = new ActionTree();
                 at.children = new List<ActionTree>();
@@ -142,12 +143,15 @@ namespace MSS.API.Core.V1.Business
             var list = laa.OrderBy(c => c.ParentMenu);
             foreach (var obj in list)
             {
-                ActionTree node = new ActionTree();
-                node.id = obj.ActionID;
-                node.text = obj.ActionName;
-                node.parentID = obj.ParentMenu;
-                ret.Add(node);
-
+                var checkobj = ret.Where(c => c.id == obj.ActionID).FirstOrDefault();
+                if (checkobj == null && obj.ActionID != 0)//保证actionid唯一
+                {
+                    ActionTree node = new ActionTree();
+                    node.id = obj.ActionID;
+                    node.text = obj.ActionName;
+                    node.parentID = obj.ParentMenu;
+                    ret.Add(node);
+                }
             }
             return ret;
         }

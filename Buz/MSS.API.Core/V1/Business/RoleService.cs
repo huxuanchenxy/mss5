@@ -58,7 +58,7 @@ namespace MSS.API.Core.V1.Business
                     List<ActionAll> actionAll = lra.Where(a => a.roleID == item.Id).ToList<ActionAll>();
                     //item.action_trees = ActionHelper.GetActionTree(actionAll);
                     List<ActionTree> actiontree = ActionHelper.ConvertToTree(actionAll);
-                    item.action_trees = ActionHelper.BuildTreeRecursive(actiontree,0);
+                    item.action_trees = ActionHelper.BuildTreeRecursive(actiontree, 0);
                 }
                 mRet.code = (int)ErrType.OK;
                 return mRet;
