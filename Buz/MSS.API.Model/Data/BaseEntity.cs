@@ -27,6 +27,9 @@ namespace MSS.API.Model.Data
             Map(o => o.IsDel).ToColumn("is_del");
         }
     }
+
+
+
     public abstract class BaseQueryParm
     {
         /// <summary>
