@@ -20,7 +20,6 @@ namespace MSS.API.Model.Data
             Map(o => o.NodeID).ToColumn("org_node_id");
             Map(o => o.UserID).ToColumn("user_id");
             Map(o => o.UserName).ToColumn("user_name");
-
             Map(o => o.CreatedBy).ToColumn("created_by");
             Map(o => o.CreatedTime).ToColumn("created_time");
             Map(o => o.UpdatedBy).ToColumn("updated_by");

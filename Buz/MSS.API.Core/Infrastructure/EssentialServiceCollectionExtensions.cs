@@ -23,7 +23,7 @@ namespace MSS.API.Core.Infrastructure
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<IActionService, ActionService>();
             services.AddTransient<IDictionaryService, DictionaryService>();
-            //TODO 需要改成新的java方式的注册发现 services.AddTransient<IServiceDiscoveryProvider, ConsulServiceProvider>();
+            services.AddTransient<IServiceDiscoveryProvider, ServiceDiscoveryProvider>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IAuthHelper, AuthHelper>();
             services.AddTransient<IUploadFileService, UploadFileService>();

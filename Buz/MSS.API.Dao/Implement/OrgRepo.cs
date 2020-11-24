@@ -19,7 +19,6 @@ namespace MSS.API.Dao.Implement
             return await WithConnection(async c =>
             {
                 string sql = "SELECT * FROM org_tree";
-                
                 var list = await c.QueryAsync<OrgTree>(sql);
                 return list.ToList();
             });
@@ -30,7 +29,6 @@ namespace MSS.API.Dao.Implement
             return await WithConnection(async c =>
             {
                 string sql = "SELECT * FROM org_tree where node_type=@nodeType and is_del=0";
-
                 var list = await c.QueryAsync<OrgTree>(sql, new { nodeType });
                 return list.ToList();
             });
@@ -48,9 +46,9 @@ namespace MSS.API.Dao.Implement
                     new
                     { 
                         ParentID = node.ParentID,
+                        CreatedBy = node.CreatedBy,
                         Name = node.Name,
                         NodeType = node.NodeType,
-                        CreatedBy = node.CreatedBy,
                         CreatedTime = node.CreatedTime,
                         IsDel = node.IsDel
                     });
@@ -59,25 +57,7 @@ namespace MSS.API.Dao.Implement
             });
         }
 
-        public async Task<OrgTree> UpdateOrgNode(OrgTree node)
-        {
-            return await WithConnection(async c =>
-            {
-                string sql = "UPDATE org_tree SET parent_id = @ParentID, name = @Name, node_type = @NodeType,"
-                            +" updated_by = @UpdatedBy, updated_time = @UpdatedTime WHERE ID = @ID;";
-                await c.ExecuteAsync(sql,
-                new
-                {
-                    ID = node.Id,
-                    ParentID = node.ParentID,
-                    Name = node.Name,
-                    NodeType = node.NodeType,
-                    UpdatedBy = node.UpdatedBy,
-                    UpdatedTime = node.UpdatedTime
-                });
-                return node;
-            });
-        }
+
 
         public async Task<bool> DeleteOrgNode(OrgTree node) {
             return await WithConnection(async c =>
@@ -104,7 +84,6 @@ namespace MSS.API.Dao.Implement
                 } else {
                     sql += " and parent_id = @ParentID";
                 }
-
                 OrgTree exist = await c.QueryFirstOrDefaultAsync<OrgTree>(sql,
                 new
                 {
@@ -143,6 +122,26 @@ namespace MSS.API.Dao.Implement
             });
         }
 
+
+        public async Task<OrgTree> UpdateOrgNode(OrgTree node)
+        {
+            return await WithConnection(async c =>
+            {
+                string sql = "UPDATE org_tree SET parent_id = @ParentID, name = @Name, node_type = @NodeType,"
+                            + " updated_by = @UpdatedBy, updated_time = @UpdatedTime WHERE ID = @ID;";
+                await c.ExecuteAsync(sql,
+                new
+                {
+                    ID = node.Id,
+                    ParentID = node.ParentID,
+                    Name = node.Name,
+                    NodeType = node.NodeType,
+                    UpdatedBy = node.UpdatedBy,
+                    UpdatedTime = node.UpdatedTime
+                });
+                return node;
+            });
+        }
         public async Task<OrgTree> GetNodeView(int id)
         {
             return await WithConnection(async c =>

@@ -20,7 +20,6 @@ namespace MSS.API.Model.Data
             Map(o => o.ParentID).ToColumn("parent_id");
             Map(o => o.NodeType).ToColumn("node_type");
             Map(o => o.PropEx).Ignore();
-
             Map(o => o.CreatedBy).ToColumn("created_by");
             Map(o => o.CreatedTime).ToColumn("created_time");
             Map(o => o.UpdatedBy).ToColumn("updated_by");

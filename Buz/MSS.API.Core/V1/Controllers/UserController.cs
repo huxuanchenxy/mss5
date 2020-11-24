@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MSS.API.Common;
+using MSS.API.Common.Utility;
 using MSS.API.Core.V1.Business;
 using MSS.API.Model.Data;
 using MSS.API.Model.DTO;
 using Newtonsoft.Json;
+using Steeltoe.Discovery.Eureka;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,14 +20,15 @@ namespace MSS.API.Core.V1.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _service;
-        public UserController(IUserService UserService)
+        private readonly IServiceDiscoveryProvider _serviceProvider;
+        public UserController(IUserService UserService, IServiceDiscoveryProvider serviceProvider)
 
         {
             //_logger = logger;
             //_mediator = mediator;
             //_cache = cache;
             _service = UserService;
-
+            _serviceProvider = serviceProvider;
         }
 
         [HttpGet("GetPageList")]
@@ -187,6 +191,14 @@ namespace MSS.API.Core.V1.Controllers
         {
             var resp = _service.GetActionByUser();
             return Ok(resp.Result);
+        }
+
+        [HttpGet("GetEureka/{servicename}")]
+        public async Task<ActionResult<ApiResult>> GetEureka(string servicename)
+        {
+            ApiResult ret = new ApiResult();
+            ret.data = await _serviceProvider.GetServiceAsync(servicename);
+            return ret;
         }
 
     }
