@@ -18,7 +18,6 @@ namespace MSS.API.Model.Data
             Map(o => o.NodeID).ToColumn("node_id");
             Map(o => o.NodeAttr).ToColumn("node_attr");
             Map(o => o.AttrValue).ToColumn("attr_value");
-
             Map(o => o.CreatedBy).ToColumn("created_by");
             Map(o => o.CreatedTime).ToColumn("created_time");
             Map(o => o.UpdatedBy).ToColumn("updated_by");

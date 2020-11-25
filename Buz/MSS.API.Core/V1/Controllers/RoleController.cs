@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MSS.API.Common;
 using MSS.API.Core.V1.Business;
 using MSS.API.Model.DTO;
+using System.Threading.Tasks;
 using static MSS.API.Common.Utility.Const;
 
 namespace MSS.API.Core.V1.Controllers
@@ -20,60 +22,85 @@ namespace MSS.API.Core.V1.Controllers
 
         }
         [HttpGet("QueryList")]
-        public ActionResult GetPageByParm([FromQuery] RoleQueryParm parm)
+        public async Task<ActionResult<ApiResult>> GetPageByParm([FromQuery] RoleQueryParm parm)
         {
-            var ret = _RoleService.GetPageByParm(parm).Result;
+            ApiResult resp = new ApiResult();
+            var ret = await _RoleService.GetPageByParm(parm);
             if (ret.code==(int)ErrType.OK)
             {
                 var data = new { rows = ret.data, total = ret.relatedData };
-                var resp = new { code = ret.code, data = data };
-                return Ok(resp);
+                resp.code = Code.Success;
+                resp.data = data;
+                return resp;
             }
             else
             {
-                var resp = new { code = ret.code, msg = ret.msg };
-                return Ok(resp);
+                resp.code = Code.Failure;
+                resp.msg = ret.msg;
+                return resp;
             }
         }
-        [HttpGet("{id}")]
-        public ActionResult GetByID(int id)
+
+        //TODO 测试
+        [HttpGet("ActionTree")]
+        public async Task<ActionResult<ApiResult>> GetActionTree()
         {
-            var ret = _RoleService.GetByID(id).Result;
+            ApiResult resp = new ApiResult();
+            var ret = await _RoleService.GetActionTree();
+            return ret;
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ApiResult>> GetByID(int id)
+        {
+            ApiResult resp = new ApiResult();
+            var ret = await  _RoleService.GetByID(id);
             if (ret.code == (int)ErrType.OK)
             {
                 var data = new { selectedAction = ret.data, role = ret.relatedData };
-                var resp = new { code = ret.code, data = data };
-                return Ok(resp);
+                resp.code = Code.Success;
+                resp.data = data;
+                return resp;
             }
             else
             {
-                var resp = new { code = ret.code, msg = ret.msg };
-                return Ok(resp);
+                resp.code = Code.Failure;
+                resp.msg = ret.msg;
+                return resp;
             }
         }
         [HttpPost("Add")]
-        public ActionResult Add(RoleStrActions roleStrActions)
+        public async Task<ActionResult<ApiResult>> Add(RoleStrActions roleStrActions)
         {
-            var resp = _RoleService.Add(roleStrActions);
-            return Ok(resp.Result);
+            await _RoleService.Add(roleStrActions);
+            ApiResult resp = new ApiResult();
+            resp.code = Code.Success;
+            return resp;
         }
         [HttpPut("Update")]
-        public ActionResult Update(RoleStrActions roleStrActions)
+        public async Task<ActionResult<ApiResult>> Update(RoleStrActions roleStrActions)
         {
-            var resp = _RoleService.Update(roleStrActions);
-            return Ok(resp.Result);
+            await _RoleService.Update(roleStrActions);
+            ApiResult resp = new ApiResult();
+            resp.code = Code.Success;
+            return resp;
         }
         [HttpDelete("{ids}")]
-        public ActionResult Delete(string ids)
+        public async Task<ActionResult<ApiResult>> Delete(string ids)
         {
-            var resp = _RoleService.Delete(ids);
-            return Ok(resp.Result);
+            await _RoleService.Delete(ids);
+            ApiResult resp = new ApiResult();
+            resp.code = Code.Success;
+            return resp;
         }
         [HttpGet("All")]
-        public ActionResult GetAll()
+        public async Task<ActionResult<ApiResult>> GetAll()
         {
-            var resp = _RoleService.GetAll();
-            return Ok(resp.Result);
+            ApiResult resp = new ApiResult();
+            var ret = await _RoleService.GetAll();
+            resp.code = Code.Success;
+            resp.data = ret.data;
+            return resp;
         }
     }
 }

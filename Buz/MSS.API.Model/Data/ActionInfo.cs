@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dapper.FluentMap.Mapping;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -21,4 +22,10 @@ namespace MSS.API.Model.Data
 
         public int? parent_menu { get; set; }
     }
+    public class ActionInfoMap : BaseEntityMap
+    {
+        public ActionInfoMap() : base() { }
+    }
+
+
 }

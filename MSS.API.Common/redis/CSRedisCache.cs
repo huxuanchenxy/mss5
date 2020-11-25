@@ -32,6 +32,7 @@ namespace MSS.API.Common
         {
             if (client != null)
                 client.Dispose();
+            GC.SuppressFinalize(this);
         }
 
         public byte[] Get(string key)

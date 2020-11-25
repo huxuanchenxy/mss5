@@ -88,22 +88,7 @@ namespace MSS.API.Core.V1.Business
             }
         }
 
-        public async Task<MSSResult> GetAll()
-        {
-            MSSResult mRet = new MSSResult();
-            try
-            {
-                mRet.data = await _ActionGroupRepo.GetAll();
-                mRet.code = (int)ErrType.OK;
-                return mRet;
-            }
-            catch (Exception ex)
-            {
-                mRet.code = (int)ErrType.SystemErr;
-                mRet.msg = ex.Message;
-                return mRet;
-            }
-        }
+        
 
         public async Task<MSSResult> Delete(string ids)
         {
@@ -141,6 +126,23 @@ namespace MSS.API.Core.V1.Business
                     return mRet;
                 }
                 mRet.data = await _ActionGroupRepo.GetByID(id);
+                mRet.code = (int)ErrType.OK;
+                return mRet;
+            }
+            catch (Exception ex)
+            {
+                mRet.code = (int)ErrType.SystemErr;
+                mRet.msg = ex.Message;
+                return mRet;
+            }
+        }
+
+        public async Task<MSSResult> GetAll()
+        {
+            MSSResult mRet = new MSSResult();
+            try
+            {
+                mRet.data = await _ActionGroupRepo.GetAll();
                 mRet.code = (int)ErrType.OK;
                 return mRet;
             }

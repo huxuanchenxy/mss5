@@ -31,10 +31,11 @@ namespace MSS.API.Dao
             services.AddTransient<IImportExcelConfigRepo<ImportExcelConfig>, ImportExcelConfigRepo>();
             services.AddTransient<IOrgRepo<OrgTree>, OrgRepo>();
             services.AddTransient<IUserCredRepo<UserCred>, UserCredRepo>();
-
+            services.AddTransient<IDocumentRepo<Document>, DocumentRepo>();
             //配置列名映射
             FluentMapper.Initialize(config =>
             {
+                config.AddMap(new BaseEntityMap());
                 config.AddMap(new UserMap());
                 config.AddMap(new EquipmentMap());
                 config.AddMap(new ImportExcelConfigMap());
@@ -44,7 +45,8 @@ namespace MSS.API.Dao
                 config.AddMap(new OrgNodePropertyMap());
                 config.AddMap(new OrgUserMap());
                 config.AddMap(new UserCredMap());
-
+                config.AddMap(new DocumentMap());
+                
             });
             return services;
         }

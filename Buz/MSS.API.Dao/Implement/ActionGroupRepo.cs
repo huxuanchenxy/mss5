@@ -26,13 +26,13 @@ namespace MSS.API.Dao.Implement
                 .Append(" left join dictionary_tree d on a.group_type=d.id ")
                 .Append(" WHERE 1=1 ");
                 StringBuilder whereSql = new StringBuilder();
-                if (!string.IsNullOrWhiteSpace(parm.searchName))
-                {
-                    whereSql.Append(" and a.group_name like '%"+ parm.searchName + "%' ");
-                }
                 if (parm.searchType!=null)
                 {
                     whereSql.Append(" and a.group_type="+ parm.searchType);
+                }
+                if (!string.IsNullOrWhiteSpace(parm.searchName))
+                {
+                    whereSql.Append(" and a.group_name like '%" + parm.searchName + "%' ");
                 }
                 sql.Append(whereSql)
                 .Append(" order by a." + parm.sort + " " + parm.order)
@@ -47,15 +47,7 @@ namespace MSS.API.Dao.Implement
                 return mRet;
             });
         }
-        public async Task<ActionGroup> GetByID(int id)
-        {
-            return await WithConnection(async c =>
-            {
-                var result = await c.QueryFirstOrDefaultAsync<ActionGroup>(
-                    " SELECT * FROM Action_Group WHERE id = @id ", new { id = id });
-                return result;
-            });
-        }
+
 
         public async Task<int> Add(ActionGroup actionGroup)
         {
@@ -63,7 +55,7 @@ namespace MSS.API.Dao.Implement
             {
                 var result = await c.ExecuteAsync(" insert into Action_Group " +
                     " values (0,@group_name,@request_url,@group_type,@group_order,@icon, " +
-                    " @active_icon,@created_time,@created_by,@updated_time,@updated_by) ", actionGroup);
+                    " @active_icon,@CreatedTime,@CreatedBy,@UpdatedTime,@UpdatedBy) ", actionGroup);
                 return result;
             });
         }
@@ -72,9 +64,9 @@ namespace MSS.API.Dao.Implement
         {
             return await WithConnection(async c =>
             {
-                var result = await c.ExecuteAsync(" update Action_Group " +
+                var result = await c.ExecuteAsync(" UPDATE Action_Group " +
                     " set group_name=@group_name,request_url=@request_url,group_type=@group_type,group_order=@group_order,icon=@icon, " +
-                    " active_icon=@active_icon,updated_time=@updated_time,updated_by=@updated_by where id=@id", actionGroup);
+                    " active_icon=@active_icon,updated_time=@UpdatedTime,updated_by=@UpdatedBy where id=@id", actionGroup);
                 return result;
             });
         }
@@ -84,6 +76,16 @@ namespace MSS.API.Dao.Implement
             return await WithConnection(async c =>
             {
                 var result = (await c.QueryAsync<ActionGroup>(" SELECT * FROM action_group ")).ToList();
+                return result;
+            });
+        }
+
+        public async Task<ActionGroup> GetByID(int id)
+        {
+            return await WithConnection(async c =>
+            {
+                var result = await c.QueryFirstOrDefaultAsync<ActionGroup>(
+                    " SELECT * FROM Action_Group WHERE id = @id ", new { id = id });
                 return result;
             });
         }

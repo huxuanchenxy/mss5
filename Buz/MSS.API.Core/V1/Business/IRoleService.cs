@@ -1,4 +1,5 @@
-﻿using MSS.API.Model.Data;
+﻿using MSS.API.Common;
+using MSS.API.Model.Data;
 using MSS.API.Model.DTO;
 using System;
 using System.Collections.Generic;
@@ -17,5 +18,7 @@ namespace MSS.API.Core.V1.Business
         Task<MSSResult> Update(RoleStrActions roleStrActions);
         Task<MSSResult> Delete(string ids);
         Task<MSSResult> GetAll();
+
+        Task<ApiResult> GetActionTree();
     }
 }

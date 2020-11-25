@@ -20,8 +20,6 @@ namespace MSS.API.Model.Data
             Map(o => o.HasChildren).ToColumn("has_children");
             Map(o => o.HasUsers).ToColumn("has_users");
             Map(o => o.HasUsersLeafOnly).ToColumn("has_users_leafonly");
-
-
             Map(o => o.CreatedBy).ToColumn("created_by");
             Map(o => o.CreatedTime).ToColumn("created_time");
             Map(o => o.UpdatedBy).ToColumn("updated_by");

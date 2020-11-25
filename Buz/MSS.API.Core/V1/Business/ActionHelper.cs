@@ -44,6 +44,7 @@ namespace MSS.API.Core.V1.Business
             return lmt;
         }
 
+
         /// <summary>
         /// 根据数据库查询结果获取对应的已选中的权限树结构（前端）
         /// </summary>
@@ -68,7 +69,7 @@ namespace MSS.API.Core.V1.Business
                     at1.id = a.ActionID;
                     at1.text = a.ActionName;
                     at1.parentID = a.GroupID;
-                    if (checkedAction.Where(me=>me==at1.id).Count()>0)
+                    if (checkedAction.Where(me => me == at1.id).Count() > 0)
                     {
                         at1.isChecked = true;
                     }
@@ -101,7 +102,8 @@ namespace MSS.API.Core.V1.Business
         {
             List<ActionTree> lat = new List<ActionTree>();
             IEnumerable<IGrouping<int, ActionAll>> groupAction = laa.GroupBy(a => a.GroupID);
-            foreach (IGrouping<int, ActionAll> group in groupAction.Where(a => a.Key != 0))
+            var tmpgroup = groupAction.Where(a => a.Key != 0);
+            foreach (IGrouping<int, ActionAll> group in tmpgroup)
             {
                 ActionTree at = new ActionTree();
                 at.children = new List<ActionTree>();
@@ -132,6 +134,43 @@ namespace MSS.API.Core.V1.Business
                 lat.Add(at);
             }
             return lat;
+        }
+
+
+        public static List<ActionTree> ConvertToTree(List<ActionAll> laa)
+        {
+            List<ActionTree> ret = new List<ActionTree>();
+            var list = laa.OrderBy(c => c.ParentMenu);
+            foreach (var obj in list)
+            {
+                var checkobj = ret.Where(c => c.id == obj.ActionID).FirstOrDefault();
+                if (checkobj == null && obj.ActionID != 0)//保证actionid唯一
+                {
+                    ActionTree node = new ActionTree();
+                    node.id = obj.ActionID;
+                    node.text = obj.ActionName;
+                    node.parentID = obj.ParentMenu;
+                    ret.Add(node);
+                }
+            }
+            return ret;
+        }
+
+        public static List<ActionTree> BuildTreeRecursive(List<ActionTree> treeNodes, int pID)
+        {
+            List<ActionTree>  resps = new List<ActionTree>();
+            List<ActionTree> templist = treeNodes.Where(c => c.parentID == pID).ToList();
+            foreach (var tmp in templist)
+            {
+                ActionTree node = new ActionTree();
+                node.id = tmp.id;
+                node.parentID = tmp.parentID;
+                node.text = tmp.text;
+                node.children = BuildTreeRecursive(treeNodes, node.id);
+                resps.Add(node);
+            }
+            return resps;
+
         }
 
     }

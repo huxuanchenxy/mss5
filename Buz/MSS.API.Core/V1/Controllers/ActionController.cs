@@ -43,7 +43,7 @@ namespace MSS.API.Core.V1.Controllers
             }
             else
             {
-                resp.code = 0;
+                resp.code = Code.Failure;
                 resp.msg = ret.msg;
                 return resp;
             }

@@ -9,4 +9,9 @@ namespace MSS.API.Model.Data
         public string role_name { get; set; }
         public string description { get; set; }
     }
+
+    public class RoleMap : BaseEntityMap
+    {
+        public RoleMap() : base() { }
+    }
 }
