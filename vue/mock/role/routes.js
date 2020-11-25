@@ -140,7 +140,7 @@ const asyncRoutes = [
         path: 'tinymce',
         component: 'views/components-demo/tinymce',
         name: 'TinymceDemo',
-        meta: { title: 'Tinymce' }
+        meta: { title: 'Tinymce中文' }
       },
       {
         path: 'markdown',
